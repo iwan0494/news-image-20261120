@@ -1,4 +1,4 @@
-# Entry program for make.fun news-image-20261120 (round 2).
+# Entry program for make.fun news-image-20261120.
 # Copies the pre-rendered poster next to this file to the output path.
 # Standard library only: no third-party packages are used or needed.
 
@@ -29,40 +29,32 @@ def sha256_of(path):
     return digest.hexdigest()
 
 
-def copy_poster_to_file(dest_path):
-    src = find_poster()
-    size = os.path.getsize(src)
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Write the news poster to the output path.")
+    parser.add_argument("--out", default=None,
+                        help="Full output file path (default: $MAKEFUN_OUTPUT_DIR/entry.png).")
+    args = parser.parse_args(argv)
+
+    if args.out:
+        out_path = args.out
+    else:
+        out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+        out_path = os.path.join(out_dir, OUTPUT_NAME)
+
+    poster = find_poster()
+    size = os.path.getsize(poster)
     if size > MAX_BYTES:
         raise ValueError("poster is %d bytes, over the 1 MiB limit" % size)
-    parent = os.path.dirname(os.path.abspath(dest_path))
-    os.makedirs(parent, exist_ok=True)
-    shutil.copyfile(src, dest_path)
-    digest = sha256_of(dest_path)
-    print("wrote %s (%d bytes, sha256 %s)" % (dest_path, size, digest))
-    return dest_path
 
+    parent = os.path.dirname(os.path.abspath(out_path))
+    if parent:
+        os.makedirs(parent, exist_ok=True)
 
-def copy_poster(out_dir):
-    dest = os.path.join(out_dir, OUTPUT_NAME)
-    return copy_poster_to_file(dest)
-
-
-def parse_args(argv):
-    parser = argparse.ArgumentParser(
-        description="Copy the pre-rendered poster to the output directory.")
-    parser.add_argument(
-        "--out", default=None,
-        help="output file path (overrides MAKEFUN_OUTPUT_DIR)")
-    return parser.parse_args(argv)
-
-
-def main(argv=None):
-    args = parse_args(argv)
-    if args.out:
-        copy_poster_to_file(args.out)
-        return 0
-    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    copy_poster(out_dir)
+    shutil.copyfile(poster, out_path)
+    copied = os.path.getsize(out_path)
+    if copied != size:
+        raise ValueError("copied %d bytes, expected %d" % (copied, size))
+    print("wrote %s (%d bytes, sha256 %s)" % (out_path, size, sha256_of(out_path)))
     return 0
 
 
