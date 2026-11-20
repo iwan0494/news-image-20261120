@@ -9,11 +9,10 @@ summarising the world's news of Friday 20 November 2026 to `/output/entry.png`.
 
 The image is a newspaper front page (1024x1024 PNG): the ICJ's 9–6 genocide
 ruling against Myanmar, the first Trump–Xi–Putin three-way summit in Shenzhen,
-and Anthropic's +17% Nasdaq debut lead the page, followed by the Houthi missile
-that hit Riyadh's tallest tower, the Berlin Ukraine summit and the Crimea Bridge
-hit, Kenya's last Ebola patient, the IMF debt warning, the FAA ground stop,
-GTA 6's $2.3 billion launch, and strikes across Europe and Italy — twelve
-stories from one Friday, with the date printed large.
+and Cyclone Akvan's landfall in Odisha lead the page, followed by the Kyiv
+ballistic barrage, the COP31 draft, the Asia AI sell-off, Anthropic's +17%
+Nasdaq debut, and 26 more stories — thirty-six stories from one Friday across
+seven regions, each sourced and tagged, with a UTC date rail and a world map.
 
 ## How it works
 
@@ -24,7 +23,7 @@ both runs write the same bytes. No network is used.
 ## Files
 
 - `main.py` — the entry program
-- `poster-20261120.png` — the image (1024x1024, 157,603 bytes)
+- `poster-20261120.png` — the image (1024x1024, 208,149 bytes)
 - `poster.py` — the script that rendered the poster (PIL, deterministic)
 - `stories.py` — the twelve stories and their data
 - `LICENSE` — MIT
